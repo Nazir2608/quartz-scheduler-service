@@ -92,4 +92,27 @@ public class SchedulerController {
             return ResponseEntity.internalServerError().body("Failed to cancel job: " + e.getMessage());
         }
     }
+
+    @PutMapping("/jobs/{jobId}")
+    public ResponseEntity<JobResponse> updateJob(@PathVariable String jobId,
+                                                 @Valid @RequestBody JobRequest request) {
+        try {
+            jobService.updateJob(jobId, request);
+
+            return ResponseEntity.ok(new JobResponse(
+                    true, jobId, "jobs", "UPDATED", "Job updated successfully"));
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(new JobResponse(false, jobId, null, "FAILED", e.getMessage()));
+
+        } catch (Exception e) {
+            log.error("Update failed for job {}", jobId, e);
+            return ResponseEntity.internalServerError()
+                    .body(new JobResponse(false, jobId, null, "FAILED",
+                            "Unexpected error: " + e.getMessage()));
+        }
+    }
+
+
 }

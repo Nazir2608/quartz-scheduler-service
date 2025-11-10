@@ -21,4 +21,5 @@ public class UpcomingJobEntity {
     private String status; // SCHEDULED, IN_PROGRESS
     private LocalDateTime scheduledAt;
     private LocalDateTime runAt; // planned execution time
+
 }
